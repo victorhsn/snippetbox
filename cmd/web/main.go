@@ -16,9 +16,6 @@ func main() {
 	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
-	//fileServer := http.FileServer(http.Dir("./ui/static/"))
-	//mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-
 	log.Println("Server is running on :4000")
 	error := http.ListenAndServe(":4000", mux)
 	log.Fatal(error)
