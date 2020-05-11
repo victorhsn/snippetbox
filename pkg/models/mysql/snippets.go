@@ -34,13 +34,9 @@ func (m *SnippetModels) Insert(title, content, expires string) (int, error) {
 //Get method to get a Snippet from database
 func (m *SnippetModels) Get(id int) (*models.Snippet, error) {
 
-	stmt := `SELECT id, title, content, created, expires FROM snippets WHERE expires > UTC_TIMESTAMP() AND id = ?`
-
-	row := m.DB.QueryRow(stmt, id)
-
 	s := &models.Snippet{}
-
-	err := row.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)
+	stmt := `SELECT id, title, content, created, expires FROM snippets WHERE expires > UTC_TIMESTAMP() AND id = ?`
+	err := m.DB.QueryRow(stmt, id).Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -48,7 +44,6 @@ func (m *SnippetModels) Get(id int) (*models.Snippet, error) {
 		} else {
 			return nil, err
 		}
-
 	}
 
 	return s, nil
